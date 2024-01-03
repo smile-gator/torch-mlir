@@ -5957,6 +5957,31 @@ def Torch_AtenNativeLayerNormOp : Torch_Op<"aten.native_layer_norm", [
   }];
 }
 
+def Torch_AtenMaxUnpool2dOp : Torch_Op<"aten.max_unpool2d", [
+    AllowsTypeRefinement,
+    HasValueSemantics,
+    ReadOnly
+  ]> {
+  let summary = "Generated op for `aten::max_unpool2d : (Tensor, Tensor, int[]) -> (Tensor)`";
+  let arguments = (ins
+    AnyTorchTensorType:$self,
+    AnyTorchTensorType:$indices,
+    AnyTorchListOfTorchIntType:$output_size
+  );
+  let results = (outs
+    AnyTorchTensorType:$result
+  );
+  let hasCustomAssemblyFormat = 1;
+  let extraClassDefinition = [{
+    ParseResult AtenMaxUnpool2dOp::parse(OpAsmParser &parser, OperationState &result) {
+      return parseDefaultTorchOp(parser, result, 3, 1);
+    }
+    void AtenMaxUnpool2dOp::print(OpAsmPrinter &printer) {
+      printDefaultTorchOp(printer, *this, 3, 1);
+    }
+  }];
+}
+
 def Torch_AtenMaxPool2dOp : Torch_Op<"aten.max_pool2d", [
     AllowsTypeRefinement,
     HasValueSemantics,
